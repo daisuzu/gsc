@@ -1,5 +1,8 @@
 # Go Source Checker
 
+[![Build Status](https://travis-ci.org/daisuzu/gsc.svg?branch=master)](https://travis-ci.org/daisuzu/gsc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/daisuzu/gsc)](https://goreportcard.com/report/github.com/daisuzu/gsc)
+
 _gsc_ checkes bits and pieces of problems in Go source code.
 
 ## Installation
