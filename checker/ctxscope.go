@@ -9,7 +9,7 @@ import (
 )
 
 func (c *checker) isContext(s string) bool {
-	for _, v := range c.contextNames {
+	for _, v := range c.opts.contextNames {
 		if strings.HasSuffix(s, v) {
 			return true
 		}
