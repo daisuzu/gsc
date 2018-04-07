@@ -5,6 +5,12 @@
 
 _gsc_ checkes bits and pieces of problems in Go source code.
 
+## Checks
+
+| Check | Description |
+| ----- | ----------- |
+| CtxScope | Not to use [context.Context](https://golang.org/pkg/context/#Context) outside the scope. |
+
 ## Installation
 
 ```sh
