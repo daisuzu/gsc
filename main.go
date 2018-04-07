@@ -26,7 +26,7 @@ func main() {
 	fs.BoolVar(&exitNonZero,
 		"exit-non-zero", true, "Exit non-zero if any problems were found")
 	fs.Var(&ctxs,
-		"target-context", "Additional target type for ContextScope other than the standard library's context")
+		"target-context", "Additional target type for CtxScope other than the standard library's context")
 	fs.Parse(os.Args[1:])
 
 	opts := []checker.Option{}
