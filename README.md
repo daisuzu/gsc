@@ -10,6 +10,7 @@ _gsc_ checkes bits and pieces of problems in Go source code.
 | Check | Description |
 | ----- | ----------- |
 | CtxScope | Not to use [context.Context](https://golang.org/pkg/context/#Context) outside the scope. |
+| RangePtr | Not to use pointer to the loop iteration variable. |
 
 ## Installation
 
