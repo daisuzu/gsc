@@ -43,5 +43,6 @@ func (*checker) Init(prog *lint.Program) {}
 func (c *checker) Funcs() map[string]lint.Func {
 	return map[string]lint.Func{
 		"CtxScope": c.CheckCtxScope,
+		"RangePtr": c.CheckRangePtr,
 	}
 }
