@@ -2,6 +2,7 @@ package ctxscope
 
 import (
 	"context"
+	"net/http"
 )
 
 type datastoreInterface struct{}
@@ -94,4 +95,11 @@ func useCtxInDeferredClosure(c context.Context) {
 	defer func() {
 		datastore.Delete(c, nil)
 	}()
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	f := func(ctx context.Context) {}
+
+	f(context.Background())
+	f(r.Context())
 }

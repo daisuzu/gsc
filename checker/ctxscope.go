@@ -70,6 +70,27 @@ func (c *checker) CheckCtxScope(j *lint.Job) {
 			return true
 		}
 
+		// Allow context returned from the following.
+		//   - "context" or "google.golang.org/appengine" package
+		//   - "net/http".Request.Context
+		if c, ok := call.Args[0].(*ast.CallExpr); ok {
+			if s, ok := c.Fun.(*ast.SelectorExpr); ok {
+				if i, ok := s.X.(*ast.Ident); ok {
+					if i.Obj == nil {
+						if i.Name == "context" || i.Name == "appengine" {
+							return true
+						}
+					} else {
+						if f, ok := i.Obj.Decl.(*ast.Field); ok {
+							if types.ExprString(f.Type) == "*http.Request" {
+								return true
+							}
+						}
+					}
+				}
+			}
+		}
+
 		j.Errorf(call.Args[0], "passing outer scope context %q to %s()", types.ExprString(call.Args[0]), types.ExprString(call.Fun))
 		return true
 	}
