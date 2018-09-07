@@ -85,6 +85,7 @@ func (c *checker) CheckCtxScope(j *lint.Job) {
 // allowedCtx checks whether arg which returns context is whitelisted.
 //   - "context" or "google.golang.org/appengine" package
 //   - "net/http".Request.Context
+//   - func that returns above context
 func allowedCtx(arg ast.Expr) bool {
 	if c, ok := arg.(*ast.CallExpr); ok {
 		switch t := c.Fun.(type) {
@@ -102,6 +103,8 @@ func allowedCtx(arg ast.Expr) bool {
 					}
 				}
 			}
+		case *ast.Ident:
+			return allowedCtx(c.Args[0])
 		}
 	}
 	return false

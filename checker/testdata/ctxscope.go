@@ -103,3 +103,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	f(context.Background())
 	f(r.Context())
 }
+
+func middleware(next http.Handler) http.Handler {
+	f := func(ctx context.Context) context.Context { return ctx }
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		next.ServeHTTP(w, r.WithContext(r.Context()))
+		next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), "key", "val")))
+		next.ServeHTTP(w, r.WithContext(f(r.Context())))
+	})
+}
