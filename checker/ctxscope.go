@@ -70,25 +70,8 @@ func (c *checker) CheckCtxScope(j *lint.Job) {
 			return true
 		}
 
-		// Allow context returned from the following.
-		//   - "context" or "google.golang.org/appengine" package
-		//   - "net/http".Request.Context
-		if c, ok := call.Args[0].(*ast.CallExpr); ok {
-			if s, ok := c.Fun.(*ast.SelectorExpr); ok {
-				if i, ok := s.X.(*ast.Ident); ok {
-					if i.Obj == nil {
-						if i.Name == "context" || i.Name == "appengine" {
-							return true
-						}
-					} else {
-						if f, ok := i.Obj.Decl.(*ast.Field); ok {
-							if types.ExprString(f.Type) == "*http.Request" {
-								return true
-							}
-						}
-					}
-				}
-			}
+		if allowedCtx(call.Args[0]) {
+			return true
 		}
 
 		j.Errorf(call.Args[0], "passing outer scope context %q to %s()", types.ExprString(call.Args[0]), types.ExprString(call.Fun))
@@ -97,4 +80,32 @@ func (c *checker) CheckCtxScope(j *lint.Job) {
 	for _, f := range j.Program.Files {
 		ast.Inspect(f, fn)
 	}
+}
+
+// allowedCtx checks whether arg which returns context is whitelisted.
+//   - "context" or "google.golang.org/appengine" package
+//   - "net/http".Request.Context
+//   - func that returns above context
+func allowedCtx(arg ast.Expr) bool {
+	if c, ok := arg.(*ast.CallExpr); ok {
+		switch t := c.Fun.(type) {
+		case *ast.SelectorExpr:
+			if i, ok := t.X.(*ast.Ident); ok {
+				if i.Obj == nil {
+					if i.Name == "context" || i.Name == "appengine" {
+						return true
+					}
+				} else {
+					if f, ok := i.Obj.Decl.(*ast.Field); ok {
+						if types.ExprString(f.Type) == "*http.Request" {
+							return true
+						}
+					}
+				}
+			}
+		case *ast.Ident:
+			return allowedCtx(c.Args[0])
+		}
+	}
+	return false
 }
