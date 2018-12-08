@@ -9,8 +9,8 @@ _gsc_ checkes bits and pieces of problems in Go source code.
 
 | Check | Description |
 | ----- | ----------- |
-| [CtxScope](checker/testdata/ctxscope.go) | Not to use [context.Context](https://golang.org/pkg/context/#Context) outside the scope. |
-| [RangePtr](checker/testdata/rangeptr.go) | Not to use pointer to the loop iteration variable. |
+| [ctxscope](ctxscope/testdata/src/a/a.go) | Not to use [context.Context](https://golang.org/pkg/context/#Context) outside the scope. |
+| [rangeptr](rangeptr/testdata/src/a/a.go) | Not to use pointer to the loop iteration variable. |
 
 ## Installation
 
@@ -21,11 +21,8 @@ go get -u github.com/daisuzu/gsc
 ## Usage
 
 ```sh
-Usage of gsc:
-	gsc [flags] # runs on package in current directory
-	gsc [flags] packages
-	gsc [flags] directory
-	gsc [flags] files... # must be a single package
+Usage: gsc [-flag] [package]
 
-For more about the flags, see 'gsc -help'.
+Run 'gsc help' for more detail,
+ or 'gsc help name' for details and flags of a specific analyzer.
 ```
