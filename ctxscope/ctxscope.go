@@ -36,7 +36,7 @@ var (
 )
 
 func init() {
-	Analyzer.Flags.BoolVar(&exitNonZero, "exit-non-zero", false, "exit non-zero if any problems were found")
+	Analyzer.Flags.BoolVar(&exitNonZero, "exit-non-zero", true, "exit non-zero if any problems were found")
 	Analyzer.Flags.Var(&ctxs, "target-context", "additional target context types other than the standard library's context")
 }
 
@@ -50,7 +50,7 @@ func isContext(s string) bool {
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
-	if exitNonZero {
+	if !exitNonZero {
 		pass.Report = func(diag analysis.Diagnostic) {
 			posn := pass.Fset.Position(diag.Pos)
 			fmt.Fprintf(os.Stderr, "%s: %s\n", posn, diag.Message)
