@@ -1,10 +1,10 @@
-package rangeptr
+package testdata
 
 func assignPtr() {
 	src := []int{1, 2, 3}
 	dst := make([]*int, len(src))
 	for i, v := range src {
-		dst[i] = &v // MATCH "using pointer to the loop iteration variable "v""
+		dst[i] = &v // want `using pointer to the loop iteration variable "v"`
 	}
 }
 
@@ -29,7 +29,7 @@ func appendPtr() {
 	src := []int{1, 2, 3}
 	dst := make([]*int, 0)
 	for _, v := range src {
-		dst = append(dst, &v) // MATCH "using pointer to the loop iteration variable "v""
+		dst = append(dst, &v) // want `using pointer to the loop iteration variable "v"`
 	}
 }
 

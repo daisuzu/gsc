@@ -1,4 +1,4 @@
-package ctxscope
+package testdata
 
 import (
 	"context"
@@ -37,10 +37,10 @@ func updateWithTxCtx(c context.Context) {
 
 func updateWithCtx(c context.Context) {
 	datastore.RunInTransaction(c, func(tc context.Context) error {
-		if err := datastore.Get(c, nil, nil); err != nil { // MATCH "passing outer scope context "c" to datastore.Get()"
+		if err := datastore.Get(c, nil, nil); err != nil { // want `passing outer scope context`
 			return err
 		}
-		_, err := datastore.Put(c, nil, nil) // MATCH "passing outer scope context "c" to datastore.Put()"
+		_, err := datastore.Put(c, nil, nil) // want `passing outer scope context "c" to datastore.Put()`
 		return err
 	}, nil)
 }
@@ -58,10 +58,10 @@ func updateWithMyCtx(c context.Context) {
 
 	ctx := &MyCtx{c}
 	datastore.RunInTransaction(ctx, func(tc context.Context) error {
-		if err := get(ctx); err != nil { // MATCH "passing outer scope context "ctx" to get()"
+		if err := get(ctx); err != nil { // want `passing outer scope context "ctx" to get()`
 			return err
 		}
-		return put(ctx) // MATCH "passing outer scope context "ctx" to put()"
+		return put(ctx) // want `passing outer scope context "ctx" to put()`
 	}, nil)
 }
 
@@ -87,7 +87,7 @@ func updateWithUnregisteredCtx(c context.Context) {
 
 func useCtxInClosure(c context.Context) {
 	func() {
-		datastore.Delete(c, nil) // MATCH "passing outer scope context "c" to datastore.Delete()"
+		datastore.Delete(c, nil) // want `passing outer scope context "c" to datastore.Delete()`
 	}()
 }
 
