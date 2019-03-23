@@ -32,11 +32,13 @@ func (v *contexts) String() string   { return "<contexts>" }
 
 var (
 	exitNonZero bool
+	tests       bool
 	ctxs        contexts
 )
 
 func init() {
 	Analyzer.Flags.BoolVar(&exitNonZero, "exit-non-zero", true, "exit non-zero if any problems were found")
+	Analyzer.Flags.BoolVar(&tests, "tests", false, "include tests")
 	Analyzer.Flags.Var(&ctxs, "target-context", "additional target context types other than the standard library's context")
 }
 
@@ -62,6 +64,10 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		(*ast.CallExpr)(nil),
 	}
 	inspect.Preorder(nodeFilter, func(n ast.Node) {
+		if !tests && strings.HasSuffix(pass.Fset.File(n.Pos()).Name(), "_test.go") {
+			return
+		}
+
 		call := n.(*ast.CallExpr)
 		if len(call.Args) == 0 {
 			return
