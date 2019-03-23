@@ -9,7 +9,7 @@ env:
 
 before_script:
   - if [[ $(go1.9.4 version) = *1.9.4* ]]; then
-    go get -u github.com/golang/dep/cmd/dep
-    $GOPATH/bin/dep init
-    $GOPATH/bin/dep ensure golang.org/x/tools@4c874b978acba4ecd4a257d3bb8829dd5de17be8
+    go get -u github.com/golang/dep/cmd/dep;
+    $GOPATH/bin/dep init;
+    $GOPATH/bin/dep ensure golang.org/x/tools@4c874b978acba4ecd4a257d3bb8829dd5de17be8;
     fi
