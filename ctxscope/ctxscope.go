@@ -86,8 +86,11 @@ func run(pass *analysis.Pass) (interface{}, error) {
 
 		// Check ctx declaration exists in the function that contains current scope.
 		scope := pass.Pkg.Scope().Innermost(call.Pos())
-		for !strings.HasPrefix(scope.String(), "function scope") {
+		for scope != nil && !strings.HasPrefix(scope.String(), "function scope") {
 			scope = scope.Parent()
+		}
+		if scope == nil {
+			return
 		}
 		if obj := scope.Lookup(types.ExprString(call.Args[0])); obj != nil {
 			return
@@ -149,6 +152,9 @@ func allowedCtx(arg ast.Expr) bool {
 				}
 			}
 		case *ast.Ident:
+			if len(c.Args) == 0 {
+				return true
+			}
 			return allowedCtx(c.Args[0])
 		}
 	}
