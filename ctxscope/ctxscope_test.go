@@ -15,4 +15,5 @@ func init() {
 func Test(t *testing.T) {
 	testdata := analysistest.TestData()
 	analysistest.Run(t, testdata, ctxscope.Analyzer, "a")
+	analysistest.Run(t, testdata, ctxscope.Analyzer, "b/context")
 }

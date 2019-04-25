@@ -25,6 +25,8 @@ func (datastoreInterface) Delete(c context.Context, key interface{}) error {
 
 var datastore = datastoreInterface{}
 
+var ctx, _ = context.WithCancel(context.TODO())
+
 func updateWithTxCtx(c context.Context) {
 	datastore.RunInTransaction(c, func(tc context.Context) error {
 		if err := datastore.Get(tc, nil, nil); err != nil {
